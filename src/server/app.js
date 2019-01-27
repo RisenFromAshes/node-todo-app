@@ -1,11 +1,13 @@
 
-require('./env')
+require('./config/config')
 
 const express = require('express')
 const {ObjectID} = require('mongodb')
 const {Todo} = require('./models/todo')
 const {User} = require('./models/user')
 const {authenticate} = require('./middleware/authenticate')
+
+const {logger} =  require('./middleware/logger')
 
 var _ = require('lodash')
 var path = require('path')
@@ -92,27 +94,35 @@ app.post('/users', (req,res)=>{
     })
 
     newUser.save().then(user=>{
-        if(!user) return res.sendStatus(400)
+        if(!user) return Promise.reject()
         
         user.getAuthToken().then(token => {
+            logger(`new user signup with email: ${user.email}`)
             res.header('x-auth', token).status(200).json(_.pick(user, ['_id','email']))
         })
     }).catch(err=>{
+        logger(`user signup with email: ${req.body.email} failed`)
         res.sendStatus(400)
     })
 
 })
 
 app.post('/users/login', (req,res)=>{
-    if(!(req.body.email && req.body.password)) return res.sendStatus(400)
+    logger('post /users/login request from ' + req.connection.remoteAddress)
+    if(!(req.body.email && req.body.password)){
+        logger('user login failed')
+        return res.sendStatus(400)
+    }
     var this_user
     User.getUserByCredentials(req.body.email, req.body.password).then(user=>{
         this_user = user
         if(user.tokens.length===0) return user.getAuthToken()
         else return Promise.resolve(user.tokens[0].token)
     }).then(token=>{
+        logger(`user logged in with email: ${this_user.email}`)
         res.status(200).header('x-auth', token).json(_.pick(this_user, ['_id', 'email']))
     }).catch(err=>{
+        logger(`user login with email: ${req.body.email} failed`)
         res.sendStatus(401)
     })
 })
@@ -123,14 +133,16 @@ app.get('/users/me', authenticate, (req,res)=>{
 
 app.delete('/users/me/logout', authenticate, (req,res)=>{
     req.user.deleteUserToken(req.token).then(()=>{
+        logger(`user logged out with email: ${req.user.email}`)
         res.sendStatus(200)
     }).catch(err=>{
+        logger(`unauthorized user logout with email: ${req.user.email} failed`)
         res.sendStatus(401)
     })
 })
 
 app.listen(process.env.PORT,()=>{
-    console.log('Connected to port', process.env.PORT)
+    logger('Connected to port '+ process.env.PORT)
 })
 
 module.exports = {app}

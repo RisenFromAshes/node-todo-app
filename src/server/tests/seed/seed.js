@@ -1,3 +1,4 @@
+
 const {ObjectID} = require('mongodb')
 const {User} = require('../../models/user')
 const {Todo} = require('../../models/todo')
@@ -30,7 +31,7 @@ var user1 = {
     tokens : [
         {
             access : 'auth',
-            token : jwt.sign({_id : userID1, access : 'auth'}, '123abc').toString()
+            token : jwt.sign({_id : userID1, access : 'auth'}, process.env.JWT_SECRET).toString()
         }
     ]
 }
@@ -42,7 +43,7 @@ var user2 = {
     tokens : [
         {
             access : 'auth',
-            token : jwt.sign({_id : userID2, access : 'auth'}, '123abc').toString()
+            token : jwt.sign({_id : userID2, access : 'auth'}, process.env.JWT_SECRET).toString()
         }
     ]
 }
