@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="form.css">
+  </head>
+  <body>
+      
+    <!-- Optional JavaScript -->
+    <script src="client.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+        
+        <div class="container p-4"> 
+            <h2 class="card-title text-center text-success mb-5 mt-3" style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">HTML, CSS, JS, Jquery, Node.js, Express.js, mongoDB TODO</h2>
+            <!-- form input section -->
+
+            <form class="form-inline d-flex justify-content-center" onsubmit="newTodo()">
+                <div class="form-row align-items-center col-10 ">                
+                    <div class="col-lg-10">
+                            <input type="text" name="todoInput" id="todoInput" class="form-text mr-auto w-100" placeholder="&#9; Describe your todo here..." aria-describedby="helpId">
+                    </div>
+                    <div class="col-lg-2 ml-auto">
+                        <button type="submit" class="btn btn-success my-2 ml-auto" onclick="newTodo()" onfocus="newTodo()">Add Todo</button>
+                    </div>  
+                </div>
+            </form>
+            
+           <div class="d-flex justify-content-center my-4">              
+
+                <div class="todo-container col-10">
+
+                        <div class="todo-header text-center  mb-2" style="color:rgb(7, 146, 81)">
+                                <strong style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color:rgb(21, 156, 111); font-size: 2.5rem">Todos</strong>
+                        </div>
+
+                        <div class="delete-button d-flex justify-content-center">
+                            <button type="button" class="btn btn-warning" id="deleteButton" 
+                            style="display: none" onclick="deleteCompleted()" onfocus="deleteCompleted() ">Remove Completed Todos</button>
+                        </div>
+                        
+                </div>
+                
+           </div>
+           <script>
+               $(document).ready(function () {
+                    $('form').submit(function (e) { 
+                        e.preventDefault();
+                        
+                    });               
+                    
+
+                    getTodoData().then(()=>{
+                        
+                        $('#deleteButton').show();
+
+                        $('.form-check-input').click(()=>{
+
+                            var id = $(this)[0].activeElement.id;
+                            var checkState = $('#'+id).prop('checked');
+
+                            var _id = id.replace('checkbox','');                            
+
+                            var todoToChange = {
+                                _id,
+                                completed : checkState,
+                                text : $('#textbox'+_id).text()
+                            };
+
+                            console.log(_id, checkState, todoToChange.text);
+
+                            todoStateToggler(todoToChange);
+                        });
+                    });                    
+               });
+           </script>
+
+        </div>
+    </body>
+</html>

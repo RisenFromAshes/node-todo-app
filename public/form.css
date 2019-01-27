@@ -1,0 +1,48 @@
+.form-text{
+    height: 1cm;
+    border-bottom: 1.5px blue solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+    transition: 0.5s border ease-in;
+}
+.form-text:focus{
+    border-bottom: 1.5px green solid;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+    box-shadow: 0px;
+    outline: none;
+}
+
+
+.form-check-input
+{
+    width: 1.25rem;
+    height: 1.25rem;
+}
+@media only screen and (max-width: 600px) {
+    html {font-size: 0.8rem;}
+  }
+  
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px) {
+    html {font-size: 0.85rem;}
+  }
+  
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+    html {font-size: 0.9rem;}
+  } 
+  
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+    html {font-size: 0.95rem;}
+  } 
+  
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+    html {font-size: 1rem;}
+  }
