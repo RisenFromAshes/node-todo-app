@@ -94,8 +94,9 @@ app.post('/users', (req,res)=>{
     })
 
     newUser.save().then(user=>{
+        console.log('Pre-',user)
         if(!user) return Promise.reject()
-        
+        console.log(user)
         user.getAuthToken().then(token => {
             logger(`new user signup with email: ${user.email}`)
             res.header('x-auth', token).status(200).json(_.pick(user, ['_id','email']))
